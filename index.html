@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>トド英語アカデミー ホーム画面に追加</title>
+<meta name="description" content="トド英語アカデミーをホーム画面に追加して、アプリのように使えます。" />
+
+<link rel="manifest" href="./manifest.webmanifest" />
+<meta name="theme-color" content="#2F6BFF" />
+<link rel="icon" href="./favicon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="./apple-touch-icon-180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="トド英語" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sky: #e8f0ff;
+    --paper: #ffffff;
+    --ink: #16233d;
+    --ink-soft: #5b6c88;
+    --line: #dfe7f5;
+    --blue: #2f6bff;
+    --blue-deep: #1a4ad6;
+    --sun: #ffc53d;
+    --r-lg: 24px;
+    --r-md: 16px;
+    --shadow: 0 14px 34px rgba(22, 35, 61, .12);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background:
+      radial-gradient(900px 480px at 50% -220px, #ffffff 0%, rgba(255,255,255,0) 70%),
+      var(--sky);
+    color: var(--ink);
+    font-family: "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 20px) 20px
+      calc(env(safe-area-inset-bottom, 0px) + 48px);
+  }
+
+  .wrap { max-width: 460px; margin: 0 auto; }
+
+  .langbar { display: flex; justify-content: flex-end; gap: 4px; margin-bottom: 14px; }
+  .langbar button {
+    border: 0; background: transparent; cursor: pointer;
+    font: inherit; font-size: 13px; color: var(--ink-soft);
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .langbar button[aria-pressed="true"] { background: #fff; color: var(--blue-deep); font-weight: 700; box-shadow: 0 2px 8px rgba(22,35,61,.08); }
+
+  .preview {
+    position: relative;
+    background: linear-gradient(170deg, #3d7cff, #1a4ad6);
+    border-radius: 30px;
+    padding: 26px 20px 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .preview::after {
+    content: ""; position: absolute; inset: auto -40px -70px -40px; height: 140px;
+    background: rgba(255,255,255,.08); border-radius: 50%;
+  }
+  .tiles { position: relative; display: flex; justify-content: center; gap: 18px; }
+  .tile { text-align: center; width: 74px; }
+  .tile img, .tile .ghost { width: 64px; height: 64px; border-radius: 17px; display: block; margin: 0 auto 7px; }
+  .tile .ghost { background: rgba(255,255,255,.16); }
+  .tile span { display: block; font-size: 11px; color: #fff; opacity: .95; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile.me img { box-shadow: 0 10px 22px rgba(0,0,0,.28); }
+  .tile.me { animation: pop .7s cubic-bezier(.2,.9,.3,1.4) .35s both; }
+  @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .tile.me { animation: none; } }
+
+  h1 {
+    font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
+    font-weight: 900; font-size: 27px; line-height: 1.4;
+    margin: 26px 0 10px; letter-spacing: -.01em;
+  }
+  .lede { margin: 0 0 24px; color: var(--ink-soft); font-size: 15px; }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    width: 100%; border: 0; cursor: pointer; text-decoration: none;
+    font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
+    font-weight: 700; font-size: 17px;
+    padding: 17px 20px; border-radius: 999px;
+    background: var(--blue); color: #fff;
+    box-shadow: 0 10px 24px rgba(47,107,255,.32);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 5px 14px rgba(47,107,255,.3); }
+  .btn.sun { background: var(--sun); color: #4a3200; box-shadow: 0 10px 24px rgba(255,197,61,.38); }
+  .btn.ghost {
+    background: #fff; color: var(--blue-deep);
+    box-shadow: inset 0 0 0 2px var(--line); font-size: 15px; padding: 14px 20px;
+  }
+  .btn + .btn { margin-top: 10px; }
+  .btn[disabled] { opacity: .5; cursor: default; }
+  :focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+  .note { margin: 12px 2px 0; font-size: 13px; color: var(--ink-soft); }
+  hr.sep { border: 0; border-top: 1px solid var(--line); margin: 24px 0; }
+
+  .card {
+    background: var(--paper); border-radius: var(--r-lg);
+    padding: 20px; margin-top: 22px; box-shadow: 0 6px 20px rgba(22,35,61,.07);
+  }
+  .card h2 { font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-size: 17px; margin: 0 0 6px; font-weight: 700; }
+  .card p { margin: 0 0 14px; font-size: 14px; color: var(--ink-soft); }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 999px;
+    background: #eef3ff; color: var(--blue-deep);
+  }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .status.ok { background: #e4f8f2; color: #0f7f66; }
+  .status.warn { background: #fff3e0; color: #9a6300; }
+  .status.no { background: #fdeceb; color: #b23434; }
+
+  dialog#guide {
+    border: 0; padding: 0; width: min(460px, 100%); max-width: 100%;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    margin: auto auto 0; background: var(--paper); color: var(--ink);
+  }
+  dialog#guide::backdrop { background: rgba(16, 26, 46, .55); }
+  .sheet { padding: 8px 20px calc(env(safe-area-inset-bottom, 0px) + 22px); max-height: 86vh; overflow-y: auto; }
+  .grab { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 8px auto 14px; }
+  .sheet h2 { font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-size: 19px; margin: 0 0 4px; }
+  .sheet .lede { font-size: 14px; margin-bottom: 18px; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  ol.steps li { counter-increment: s; margin-bottom: 20px; }
+  ol.steps .head { display: flex; gap: 11px; align-items: flex-start; }
+  ol.steps .head::before {
+    content: counter(s);
+    flex: 0 0 26px; height: 26px; margin-top: 1px;
+    display: grid; place-items: center;
+    background: var(--blue); color: #fff; border-radius: 50%;
+    font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 14px;
+  }
+  ol.steps .head p { margin: 0; font-size: 15px; line-height: 1.6; }
+  ol.steps .head b { color: var(--blue-deep); }
+  ol.steps figure {
+    margin: 11px 0 0; border-radius: var(--r-md);
+    background: #f5f8fe; border: 1px solid var(--line); overflow: hidden;
+  }
+  ol.steps figure svg { display: block; width: 100%; height: auto; }
+
+  .callout {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: #fff8e6; border-radius: var(--r-md); padding: 13px 15px;
+    font-size: 13.5px; line-height: 1.65; margin-bottom: 18px;
+  }
+  .callout svg { flex: 0 0 18px; margin-top: 3px; }
+
+  details.diag { margin-top: 22px; }
+  details.diag summary {
+    cursor: pointer; font-size: 13px; color: var(--ink-soft); list-style: none;
+    padding: 9px 14px; background: rgba(255,255,255,.7); border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  details.diag summary::-webkit-details-marker { display: none; }
+  details.diag .card { margin-top: 10px; }
+  dl.kv { margin: 0; font-size: 13px; }
+  dl.kv div { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid #f0f4fa; }
+  dl.kv div:last-child { border-bottom: 0; }
+  dl.kv dt { color: var(--ink-soft); flex: 0 0 auto; }
+  dl.kv dd { margin: 0; text-align: right; font-weight: 500; word-break: break-all; }
+  dl.kv dd.bad { color: #b23434; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="langbar" aria-label="Language">
+    <button type="button" data-lang="ja" aria-pressed="true">日本語</button>
+    <button type="button" data-lang="ko" aria-pressed="false">한국어</button>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  </nav>
+
+  <section class="preview" aria-hidden="true">
+    <div class="tiles">
+      <div class="tile"><div class="ghost"></div><span>&nbsp;</span></div>
+      <div class="tile me">
+        <img src="./icon-192.png" alt="" width="64" height="64" />
+        <span data-i18n="tileName">トド英語</span>
+      </div>
+      <div class="tile"><div class="ghost"></div><span>&nbsp;</span></div>
+    </div>
+  </section>
+
+  <h1 data-i18n="title">ホーム画面に追加して、<br />アプリのように使おう</h1>
+  <p class="lede" data-i18n="lede">追加すると、ブラウザを開かなくてもアイコンひとつで今日の学習に入れます。</p>
+
+  <div id="beforeInstall">
+    <button class="btn" id="installBtn" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="16" rx="4" /><path d="M12 9v6M9 12h6" />
+      </svg>
+      <span data-i18n="install">ホーム画面に追加</span>
+    </button>
+    <button class="btn ghost" id="guideBtn" type="button" data-i18n="howto">追加のしかたを見る</button>
+    <p class="note" id="hint"></p>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- 설치 여부와 상관없이 항상 보이는 사이트 이동 버튼 -->
+  <a class="btn sun" id="openBtn" href="https://todoacademy.com/eng-jp/today">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M5 12h13M13 6l6 6-6 6" />
+    </svg>
+    <span data-i18n="openToday">今日の学習をひらく</span>
+  </a>
+  <p class="note hidden" id="standaloneNote" data-i18n="installedNote">アプリとして起動しています。</p>
+
+  <section class="card" id="pushCard">
+    <h2 data-i18n="pushTitle">学習リマインダー</h2>
+    <p data-i18n="pushDesc">学習の時間になったらお知らせします。</p>
+    <div id="pushStatus"></div>
+    <button class="btn ghost" id="pushBtn" type="button" style="margin-top:14px" data-i18n="pushEnable">通知をオンにする</button>
+    <button class="btn ghost" id="pushTestBtn" type="button" data-i18n="pushTest">テスト通知を送る</button>
+  </section>
+
+  <details class="diag">
+    <summary data-i18n="diag">動作チェック</summary>
+    <div class="card">
+      <dl class="kv" id="diagList"></dl>
+    </div>
+  </details>
+</div>
+
+<dialog id="guide" aria-labelledby="guideTitle">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2 id="guideTitle"></h2>
+    <p class="lede" id="guideLede"></p>
+    <div id="guideCallout"></div>
+    <ol class="steps" id="guideSteps"></ol>
+    <button class="btn ghost" id="guideClose" type="button" data-i18n="close">閉じる</button>
+  </div>
+</dialog>
+
+<script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "トド英語アカデミー",
+  "short_name": "トド英語",
+  "description": "毎日の英語学習をホーム画面から。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./index.html?app=1",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait",
+  "background_color": "#2F6BFF",
+  "theme_color": "#2F6BFF",
+  "categories": ["education", "kids"],
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
